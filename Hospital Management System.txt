@@ -1,0 +1,307 @@
+mysql> create database Noble_Hospital;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> use Noble_hospital
+Database changed
+mysql> create table Patient (
+    -> P_ID int Not Null,
+    -> P_Name varchar(15) Not Null,
+    -> P_address varchar(50) Not Null,
+    -> P_age int Not Null,
+    -> P_gender ENUM ('M','F') Not Null,
+    -> PRIMARY KEY (P_ID)
+    -> );
+Query OK, 0 rows affected (0.07 sec)
+
+mysql> create table Appointment (
+    -> A_ID int Not Null,
+    -> A_Date Date Not Null,
+    -> A_Time TimeStamp Not Null,
+    -> A_Status set('Confirm','Cancel','Postpone') Default Null,
+    -> PRIMARY KEY (A_ID),
+    -> P_ID int Not Null,
+    -> FOREIGN KEY (P_ID) references Patient (P_ID) );
+Query OK, 0 rows affected (0.07 sec)
+
+mysql> create table Medicines (
+    -> M_ID int Not Null,
+    -> M_Type varchar (20) Not Null,
+    -> P_ID int Not Null,
+    -> PRIMARY KEY (M_ID),
+    -> FOREIGN KEY (P_ID) references Patient (P_ID)
+    -> );
+Query OK, 0 rows affected (0.09 sec)
+
+mysql> create table Med_Test (
+    -> Reg_ID int Not Null,
+    -> T_Name varchar(50) Not Null,
+    -> P_ID int Not Null,
+    -> PRIMARY KEY (Reg_ID),
+    -> FOREIGN KEY (P_ID) references Patient (P_ID)
+    -> );
+Query OK, 0 rows affected (0.08 sec)
+
+mysql> create table Bill (
+    -> B_ID int Not Null,
+    -> P_ID int Not Null,
+    -> B_Amount Varchar (50) Not Null,
+    -> B_Method Set ('Cash','Cheque','Card','Online'),
+    -> PRIMARY KEY (B_ID),
+    -> FOREIGN KEY (P_ID) references Patient (P_ID)
+    -> );
+Query OK, 0 rows affected (0.07 sec)
+
+mysql> create table Doctor (
+    -> D_ID int Not Null,
+    -> D_Name varchar(20) Not Null,
+    -> D_Qualification varchar(25) Not Null,
+    -> D_Specialization varchar(25) Not Null,
+    -> D_Gender Enum ('M','F') Not Null,
+    -> D_MobileNo varchar(25) Not Null,
+    -> PRIMARY KEY (D_ID)
+    -> );
+Query OK, 0 rows affected (0.07 sec)
+
+mysql> create table Diagnose_Report (
+    -> R_ID int Not Null,
+    -> R_Details varchar(55) Not Null,
+    -> P_ID int Not Null,
+    -> PRIMARY KEY (R_ID),
+    -> FOREIGN KEY (P_ID) references Patient (P_ID) );
+Query OK, 0 rows affected (0.07 sec)
+
+INSERT VALUES
+
+mysql> INSERT INTO Patient(P_ID,P_Name,P_address,P_age,P_gender)
+    -> VALUES
+    -> (101,'Abhi','Hadapsar',20,'M'),
+    -> (102,'Atharva','Sinhgad Road',20,'M'),
+    -> (103,'Swati','Pune',35,'F'),
+    -> (104,'Mansi','Katraj',29,'F'),
+    -> (105,'Bhagwan','Daund',80,'M'),
+    -> (106,'Diksha','Mundhwa',65,'F'),
+    -> (107,'Mukta','Baramati',70,'F'),
+    -> (108,'Laxman','Yawat',60,'M'),
+    -> (109,'Ayush','Pune',20,'M'),
+    -> (110,'Sahil','Pune',19,'M'),
+    -> ;
+Query OK, 10 rows affected (0.02 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO Appointment(A_ID,A_Date,A_Time,A_Status,P_ID)
+    -> VALUES
+    -> (1,'25-06-22','2022-06-25 10:00:00','Confirm',101),
+    -> (2,'25-06-22','2022-06-25 12:00:00','Postpone',102),
+    -> (3,'25-06-22','2022-06-25 19:00:00','Cancel',103),
+    -> (4,'26-06-22','2022-06-26 10:00:00','Confirm',104),
+    -> (5,'26-06-22','2022-06-26 13:00:00','Confirm',105),
+    -> (6,'26-06-22','2022-06-26 15:00:00','Postpone',106),
+    -> (7,'27-06-22','2022-06-27 11:00:00','Cancel',107),
+    -> (8,'27-06-22','2022-06-27 14:00:00','Confirm',108),
+    -> (9,'28-06-22','2022-06-28 15:00:00','Postpone',109),
+    -> (10,'29-06-22','2022-06-29 11:00:00','Cancel',110)
+    -> ;
+Query OK, 10 rows affected (0.02 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO Medicines(M_ID,M_Type,P_ID)
+    -> VALUES
+    -> (1001,'Cough',101),
+    -> (1002,'Cold',102),
+    -> (1003,'Fever',103),
+    -> (1004,'Fever',104),
+    -> (1005,'Typhoid',105),
+    -> (1006,'Cough',106),
+    -> (1007,'Fever',107),
+    -> (1008,'Headache',108),
+    -> (1009,'Hair Shamppo',109),
+    -> (1010,'Cold',110)
+    -> ;
+Query OK, 10 rows affected (0.03 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO Med_Test(Reg_ID,T_Name,P_ID)
+    -> VALUES
+    -> (111,'Blood Test',101),
+    -> (112,'X-Ray',102),
+    -> (113,'Sonography',103),
+    -> (114,'Urine Test',104),
+    -> (115,'RTPCR',105),
+    -> (116,'X-Ray',106),
+    -> (117,'Blood Test',107),
+    -> (118,'Hemoglobin',108),
+    -> (119,'Platlets',109),
+    -> (120,'X-Ray',110)
+    -> ;
+Query OK, 10 rows affected (0.01 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO Bill(B_ID,P_ID,B_Amount,B_Method)
+    -> VALUES
+    -> (60,101,'10000','Card'),
+    -> (61,102,'50000','Online'),
+    -> (62,103,'5000','Cash'),
+    -> (63,104,'10000','Cash'),
+    -> (64,105,'15000','Card'),
+    -> (65,106,'15500','Card'),
+    -> (66,107,'17850','Card'),
+    -> (67,108,'19550','Online'),
+    -> (68,109,'20000','Cash'),
+    -> (69,110,'16895','Card')
+    -> ;
+Query OK, 10 rows affected (0.01 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO Doctor(D_ID,D_Name,D_Qualification,D_Specialization,D_Gender,D_MobileNo)
+    -> VALUES
+    -> (191,'Dr Wabale','BHMS','Homeopathy','M','9850112673'),
+    -> (192,'Dr Palange','MD','Orthopedic','F','9853412613'),
+    -> (193,'Dr Abane','MD','Orthopedic','F','9828312613'),
+    -> (194,'Dr Ghadge','MBBS','Opthalmologist','M','9828312113'),
+    -> (195,'Dr Mastud','MD','Ayurvedic','M','9828612113'),
+    -> (196,'Dr Ghule','MBBS','General Physcian','F','9828354113'),
+    -> (197,'Dr Bhosale','MBBS','General Physcian','M','9828044113'),
+    -> (198,'Dr Patil','MBBS','Cardiothonacic','M','9098044113'),
+    -> (199,'Dr Tupe','MD','Otolaryngology','F','9828024113'),
+    -> (200,'Dr Pawar','MBBS','Trichologist','M','98280241003')
+    -> ;
+Query OK, 10 rows affected (0.01 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO Diagnose_Report(R_ID,R_Details,P_ID)
+    -> VALUES
+    -> (201,'Cough',101),
+    -> (202,'Cold',102),
+    -> (203,'Fever',103),
+    -> (204,'Fever',104),
+    -> (205,'Typhoid',105),
+    -> (206,'Cough',106),
+    -> (207,'Fever',107),
+    -> (208,'Headache',108),
+    -> (209,'Hair Fall',109),
+    -> (210,'Cold',110)
+    -> ;
+Query OK, 10 rows affected (0.03 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+OUTPUT
+
+mysql> select*from Patient;
++------+---------+--------------+-------+----------+
+| P_ID | P_Name  | P_address    | P_age | P_gender |
++------+---------+--------------+-------+----------+
+|  101 | Abhi    | Hadapsar     |    20 | M        |
+|  102 | Atharva | Sinhgad Road |    20 | M        |
+|  103 | Swati   | Pune         |    35 | F        |
+|  104 | Mansi   | Katraj       |    29 | F        |
+|  105 | Bhagwan | Daund        |    80 | M        |
+|  106 | Diksha  | Mundhwa      |    65 | F        |
+|  107 | Mukta   | Barammati    |    70 | F        |
+|  108 | Laxman  | Yawat        |    60 | M        |
+|  109 | Ayush   | Pune         |    20 | M        |
+|  110 | Sahil   | Pune         |    19 | M        |
++------+---------+--------------+-------+----------+
+10 rows in set (0.00 sec)
+
+mysql> select*from Appointment;
++------+------------+---------------------+----------+------+
+| A_ID | A_Date     | A_Time              | A_Status | P_ID |
++------+------------+---------------------+----------+------+
+|    1 | 2025-06-22 | 2022-06-25 10:00:00 | Confirm  |  101 |
+|    2 | 2025-06-22 | 2022-06-25 12:00:00 | Postpone |  102 |
+|    3 | 2025-06-22 | 2022-06-25 19:00:00 | Cancel   |  103 |
+|    4 | 2026-06-22 | 2022-06-26 10:00:00 | Confirm  |  104 |
+|    5 | 2026-06-22 | 2022-06-26 13:00:00 | Confirm  |  105 |
+|    6 | 2026-06-22 | 2022-06-26 15:00:00 | Postpone |  106 |
+|    7 | 2027-06-22 | 2022-06-27 11:00:00 | Cancel   |  107 |
+|    8 | 2027-06-22 | 2022-06-27 14:00:00 | Confirm  |  108 |
+|    9 | 2028-06-22 | 2022-06-28 15:00:00 | Postpone |  109 |
+|   10 | 2029-06-22 | 2022-06-29 11:00:00 | Cancel   |  110 |
++------+------------+---------------------+----------+------+
+10 rows in set (0.00 sec)
+
+mysql> select*from Medicines;
++------+--------------+------+
+| M_ID | M_Type       | P_ID |
++------+--------------+------+
+| 1001 | Cough        |  101 |
+| 1002 | Cold         |  102 |
+| 1003 | Fever        |  103 |
+| 1004 | Fever        |  104 |
+| 1005 | Typhoid      |  105 |
+| 1006 | Cough        |  106 |
+| 1007 | Fever        |  107 |
+| 1008 | Headache     |  108 |
+| 1009 | Hair Shamppo |  109 |
+| 1010 | Cold         |  110 |
++------+--------------+------+
+10 rows in set (0.00 sec)
+
+mysql> select*from Med_Test;
++--------+------------+------+
+| Reg_ID | T_Name     | P_ID |
++--------+------------+------+
+|    111 | Blood Test |  101 |
+|    112 | X-Ray      |  102 |
+|    113 | Sonography |  103 |
+|    114 | Urine Test |  104 |
+|    115 | RTPCR      |  105 |
+|    116 | X-Ray      |  106 |
+|    117 | Blood Test |  107 |
+|    118 | Hemoglobin |  108 |
+|    119 | Platlets   |  109 |
+|    120 | X-Ray      |  110 |
++--------+------------+------+
+10 rows in set (0.00 sec)
+
+mysql> select*from Bill;
++------+------+----------+----------+
+| B_ID | P_ID | B_Amount | B_Method |
++------+------+----------+----------+
+|   60 |  101 | 10000    | Card     |
+|   61 |  102 | 50000    | Online   |
+|   62 |  103 | 5000     | Cash     |
+|   63 |  104 | 10000    | Cash     |
+|   64 |  105 | 15000    | Card     |
+|   65 |  106 | 15500    | Card     |
+|   66 |  107 | 17850    | Card     |
+|   67 |  108 | 19550    | Online   |
+|   68 |  109 | 20000    | Cash     |
+|   69 |  110 | 16895    | Card     |
++------+------+----------+----------+
+10 rows in set (0.00 sec)
+
+mysql> select*from Doctor;
++------+------------+-----------------+------------------+----------+-------------+
+| D_ID | D_Name     | D_Qualification | D_Specialization | D_Gender | D_MobileNo  |
++------+------------+-----------------+------------------+----------+-------------+
+|  191 | Dr Wabale  | BHMS            | Homeopathy       | M        | 9850112673  |
+|  192 | Dr Palange | MD              | Orthopedic       | F        | 9853412613  |
+|  193 | Dr Abane   | MD              | Orthopedic       | F        | 9828312613  |
+|  194 | Dr Ghadge  | MBBS            | Opthalmologist   | M        | 9828312113  |
+|  195 | Dr Mastud  | MD              | Ayurvedic        | M        | 9828612113  |
+|  196 | Dr Ghule   | MBBS            | General Physcian | F        | 9828354113  |
+|  197 | Dr Bhosale | MBBS            | General Physcian | M        | 9828044113  |
+|  198 | Dr Patil   | MBBS            | Cardiothonacic   | M        | 9098044113  |
+|  199 | Dr Tupe    | MD              | Otolaryngology   | F        | 9828024113  |
+|  200 | Dr Pawar   | MBBS            | Trichologist     | M        | 98280241003 |
++------+------------+-----------------+------------------+----------+-------------+
+10 rows in set (0.00 sec)
+
+mysql> select*from Diagnose_Report;
++------+-----------+------+
+| R_ID | R_Details | P_ID |
++------+-----------+------+
+|  201 | Cough     |  101 |
+|  202 | Cold      |  102 |
+|  203 | Fever     |  103 |
+|  204 | Fever     |  104 |
+|  205 | Typhoid   |  105 |
+|  206 | Cough     |  106 |
+|  207 | Fever     |  107 |
+|  208 | Headache  |  108 |
+|  209 | Hair Fall |  109 |
+|  210 | Cold      |  110 |
++------+-----------+------+
+10 rows in set (0.00 sec)
+
